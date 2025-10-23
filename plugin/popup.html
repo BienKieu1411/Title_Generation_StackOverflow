@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filler Extension</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="popup-container">
+        <div class="popup-header">
+            <h2>Title Generator</h2>
+            <p class="popup-description">Title suggestions for Stack Overflow questions</p>
+        </div>
+        
+        <div class="popup-content">
+            <div class="instruction-section">
+                <h3>How to use:</h3>
+                <ol>
+                    <li>Navigate to Stack Overflow's "Ask Question" page</li>
+                    <li>Write your question description and add code snippets</li>
+                    <li>Press <kbd>Ctrl + Q</kbd> to generate AI title suggestions</li>
+                    <li>Click any suggestion to automatically fill the title field</li>
+                </ol>
+            </div>
+            
+            <div class="status-section">
+                <div class="status-indicator" id="status-indicator">
+                    <span class="status-text">Ready to generate titles</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popup-footer">
+            <button id="test-connection-btn" class="test-btn">Test Connection</button>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
