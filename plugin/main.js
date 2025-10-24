@@ -1,6 +1,62 @@
 (function () {
   const API_BASE_URL = 'http://127.0.0.1:8000';
 
+  // Non-blocking toast helper to show short messages without interrupting the user
+  function showToast(message, options = {}) {
+    const duration = options.duration || 4000;
+    const containerId = 'tg_toast_container';
+    let container = document.getElementById(containerId);
+    if (!container) {
+      container = document.createElement('div');
+      container.id = containerId;
+      container.style.position = 'fixed';
+      container.style.right = '20px';
+      container.style.bottom = '20px';
+      container.style.zIndex = '10000';
+      container.style.display = 'flex';
+      container.style.flexDirection = 'column';
+      container.style.gap = '8px';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.background = 'rgba(0,0,0,0.85)';
+    toast.style.color = 'white';
+    toast.style.padding = '10px 14px';
+    toast.style.borderRadius = '8px';
+    toast.style.boxShadow = '0 6px 20px rgba(0,0,0,0.15)';
+    toast.style.fontSize = '13px';
+    toast.style.maxWidth = '320px';
+    toast.style.opacity = '0';
+    toast.style.transition = 'opacity 200ms ease, transform 200ms ease';
+    toast.style.transform = 'translateY(6px)';
+    toast.style.cursor = 'pointer';
+
+    container.appendChild(toast);
+    // trigger transition
+    void toast.offsetWidth;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateY(0)';
+
+    let hideTimeout = setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(6px)';
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+        if (container && container.children.length === 0 && container.parentNode) container.parentNode.removeChild(container);
+      }, 220);
+    }, duration);
+
+    // remove on click
+    toast.addEventListener('click', () => {
+      clearTimeout(hideTimeout);
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+      if (container && container.children.length === 0 && container.parentNode) container.parentNode.removeChild(container);
+    });
+
+    return toast;
+  }
   function createTitleSuggestionPanel(description, code, tag, targetInputId = 'title') {
     console.log('createTitleSuggestionPanel called with:', {description: description.substring(0, 50) + '...', code: code.substring(0, 50) + '...', tag, targetInputId});
     let suggestionPanel = document.getElementById('title_suggestion_panel');
@@ -108,7 +164,13 @@
       })
       .catch((error) => {
         console.error('Error fetching title suggestions:', error);
-        alert('Error connecting to the title generation service. Please make sure the backend server is running.');
+        // Use a non-blocking toast so we don't interrupt the user's workflow
+        try {
+          showToast('Error connecting to the title generation service. Title suggestions are unavailable.');
+        } catch (e) {
+          // If toast helper is not available for any reason, fallback to console
+          console.error('showToast failed:', e);
+        }
         suggestionPanel.style.display = 'none';
       });
   }
