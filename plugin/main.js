@@ -1,7 +1,6 @@
 (function () {
   const API_BASE_URL = 'http://127.0.0.1:8000';
 
-  // Non-blocking toast helper to show short messages without interrupting the user
   function showToast(message, options = {}) {
     const duration = options.duration || 4000;
     const containerId = 'tg_toast_container';
@@ -34,7 +33,6 @@
     toast.style.cursor = 'pointer';
 
     container.appendChild(toast);
-    // trigger transition
     void toast.offsetWidth;
     toast.style.opacity = '1';
     toast.style.transform = 'translateY(0)';
@@ -48,7 +46,6 @@
       }, 220);
     }, duration);
 
-    // remove on click
     toast.addEventListener('click', () => {
       clearTimeout(hideTimeout);
       if (toast.parentNode) toast.parentNode.removeChild(toast);
