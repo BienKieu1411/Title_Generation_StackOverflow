@@ -155,17 +155,18 @@
           displayTitleSuggestions('title_suggestion_panel', targetInputId, uniqueTitles);
         } else {
           console.error('Invalid response format:', data);
-          alert('Error: Invalid response from the title generation service.');
+          try {
+            showToast('Error: Invalid response from the title generation service.');
+          } catch (e) {
+            console.error('showToast failed:', e);
+          }
           suggestionPanel.style.display = 'none';
         }
       })
       .catch((error) => {
-        console.error('Error fetching title suggestions:', error);
-        // Use a non-blocking toast so we don't interrupt the user's workflow
         try {
           showToast('Error connecting to the title generation service. Title suggestions are unavailable.');
         } catch (e) {
-          // If toast helper is not available for any reason, fallback to console
           console.error('showToast failed:', e);
         }
         suggestionPanel.style.display = 'none';
@@ -292,7 +293,11 @@
             titleInput.focus();
           }, 100);
         } else {
-          alert('Could not find title input field. Please make sure you are on the Stack Overflow ask page.');
+          try {
+            showToast('Could not find title input field. Please make sure you are on the Stack Overflow ask page.');
+          } catch (e) {
+            console.error('showToast failed:', e);
+          }
         }
       });
 
@@ -309,7 +314,7 @@
       text-align: center;
       border-radius: 0 0 8px 8px;
     `;
-    footer.innerHTML = 'Click any title to use it • Drag to move panel';
+    footer.innerHTML = 'Click any title to use it';
     container.appendChild(footer);
     
     container.style.display = 'block';
@@ -403,15 +408,24 @@
       let attempts = 0;
       const maxAttempts = 10;
 
+      function normalizeTag(tag) {
+        const map = {
+          "pythonDismiss tag": "Python",
+          "javaDismiss tag": "Java",
+          "c#Dismiss tag": "C#",
+          "javascriptDismiss tag": "JS"
+        };
+      
+        return map[tag] || tag;  
+      }
+
       function findAndProcess() {
         let bodyElement = null;
         for (const selector of bodySelectors) {
           bodyElement = document.querySelector(selector);
-          if (bodyElement) {
-            break;
-          }
+          if (bodyElement) break;
         }
-
+      
         if (bodyElement) {
           let body = '';
           if (bodyElement.contentEditable === 'true') {
@@ -419,22 +433,23 @@
           } else {
             body = bodyElement.value || '';
           }
-
+        
           if (!body || !body.trim()) {
-            alert('No body content found. Please type your question first.');
+            try { showToast('No body content found. Please type your question first.'); } 
+            catch (e) { console.error('showToast failed:', e); }
             return;
           }
-
+        
           let description = '';
           let code = '';
           let tag = '';
-
+        
           let titleInput = null;
           for (const selector of titleSelectors) {
             titleInput = document.querySelector(selector);
             if (titleInput) break;
           }
-
+        
           let addedTags = document.querySelectorAll('.s-tag');
           if (addedTags.length > 0) {
             let tagNames = [];
@@ -451,28 +466,37 @@
             }
           }
 
-          const codeBlockMatches = body.match(/```[\s\S]*?```/g);
-          const inlineCodeMatches = body.match(/`[^`\n]+`/g);
+          tag = normalizeTag(tag.trim());
 
+          const codeBlockMatches = body.match(/```[\s\S]*?```/g) || [];
+          const inlineCodeMatches = [];
+          const inlineRegex = /`([\s\S]*?)`/g;
+          let m;
+          while ((m = inlineRegex.exec(body)) !== null) {
+            inlineCodeMatches.push(m[1]);
+          }
+        
           let allCode = [];
-          if (codeBlockMatches) allCode = allCode.concat(codeBlockMatches);
-          if (inlineCodeMatches) allCode = allCode.concat(inlineCodeMatches);
+          if (codeBlockMatches.length > 0) allCode = allCode.concat(codeBlockMatches);
+          if (inlineCodeMatches.length > 0) allCode = allCode.concat(inlineCodeMatches);
           if (allCode.length > 0) code = allCode.join('\n\n');
-
+        
           description = body;
-          if (codeBlockMatches) codeBlockMatches.forEach(block => { description = description.replace(block, ''); });
-          if (inlineCodeMatches) inlineCodeMatches.forEach(inline => { description = description.replace(inline, ''); });
+          codeBlockMatches.forEach(block => {
+            description = description.replace(block, '');
+          });
+          description = description.replace(/`[\s\S]*?`/g, '');
           description = description.replace(/\n\s*\n/g, '\n').trim();
-
+        
           const targetInputId = titleInput ? titleInput.id || 'title' : 'title';
           createTitleSuggestionPanel(description, code, tag, targetInputId);
-
+        
         } else if (attempts < maxAttempts) {
           attempts++;
-          console.log(`Editor not found (attempt ${attempts}/${maxAttempts}). Retrying...`);
           setTimeout(findAndProcess, 300);
         } else {
-          alert('Could not find the text editor. Please make sure the page is fully loaded.');
+          try { showToast('Could not find the text editor. Please make sure the page is fully loaded.'); } 
+          catch (e) { console.error('showToast failed:', e); }
         }
       }
 

@@ -1,5 +1,5 @@
 {
-	"name": "Filler Extension",
+	"name": "Titles Generator for StackOverflow",
 	"version": "1.2",
 	"description": "Automatically generating titles based on bi-modal information and prompt learning",
 	"permissions": ["activeTab", "declarativeContent", "storage"],

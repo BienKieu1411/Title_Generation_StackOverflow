@@ -50,30 +50,6 @@ def generate_title(request: TitleRequest):
         "processing_time": round(time_end - time_start, 2)
     }
 
-@app.get("/genTitle")
-def generate_title_get(
-    tag: str = Query(""),
-    description: str = Query(""),
-    code: str = Query(""),
-):
-    time_start = time.time()
-    warnings.filterwarnings("ignore")
-
-    result = client.predict(
-        tag,
-        description,
-        code,
-        api_name="/predict"
-    )
-
-    summaries = [row[1] for row in result["data"]]
-    time_end = time.time()
-
-    return {
-        "title_list": summaries,
-        "processing_time": round(time_end - time_start, 2)
-    }
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(

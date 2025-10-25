@@ -39,10 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const statusText = statusIndicator.querySelector('.status-text');
         statusText.textContent = message;
         
-        // Remove existing status classes
         statusIndicator.classList.remove('success', 'error', 'loading');
         
-        // Add new status class
         if (type) {
             statusIndicator.classList.add(type);
         }
