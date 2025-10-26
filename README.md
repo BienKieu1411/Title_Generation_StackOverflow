@@ -43,7 +43,7 @@ Title_Generation_StackOverflow/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/BienKieu1411/Title_Generation_StackOverflow
    cd Title_Generation_StackOverflow
    ```
 
@@ -115,7 +115,8 @@ Title_Generation_StackOverflow/
 
 3. **Generate title**
    - Click the extension icon in your browser toolbar
-   - The extension will analyze your question and generate optimized titles
+   - Use Button "Test Connection" to check connection with backend
+   - Use Ctrl + Q to analyze your question and generate optimized titles
    - Choose from the suggested titles
 
 ### API Usage
