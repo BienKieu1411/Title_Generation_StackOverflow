@@ -2,6 +2,10 @@
 
 A Chrome extension that automatically generates optimized titles for StackOverflow questions.
 
+## Demo Plugin
+
+![Demo](demo/demo.gif)
+
 ## Features
 
 - **Automatic Title Generation**: Generate relevant titles based on question description, code snippets, and tags
