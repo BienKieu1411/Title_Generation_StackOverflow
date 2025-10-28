@@ -4,7 +4,7 @@ A Chrome extension that automatically generates optimized titles for StackOverfl
 
 ## Demo Plugin
 
-![Demo](demo/demo.gif)
+![Demo](demo/StackOverflow_Title_Generation.gif)
 
 ## Features
 
