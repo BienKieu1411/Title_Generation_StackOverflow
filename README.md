@@ -2,6 +2,8 @@
 
 A Chrome extension that automatically generates optimized titles for StackOverflow questions.
 
+Model HuyTran1301/constrative_cont_so_phase2_SI used in the paper is deployed on ![Hugging Face](https://huggingface.co/spaces/BienKieu/Title_Generation_SO)
+
 ## Demo Plugin
 
 ![Demo](demo/StackOverflow_Title_Generation.gif)
