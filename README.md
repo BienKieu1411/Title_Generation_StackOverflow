@@ -140,11 +140,6 @@ curl -X POST "http://localhost:8000/genTitle" \
   }'
 ```
 
-#### GET /genTitle
-```bash
-curl "http://localhost:8000/genTitle?description=How%20to%20sort%20an%20array%20in%20Python?&code=arr%20=%20[3,%201,%204,%201,%205]&tag=python"
-```
-
 #### Response Format
 ```json
 {
