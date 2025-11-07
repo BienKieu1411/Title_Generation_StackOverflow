@@ -442,55 +442,30 @@
         
           let description = '';
           let code = '';
-          let tag = '';
+          let lang = '';
+
+          body = body.replace(/\r/g, '').trim();
+
+          const match = body.match(
+            /([\s\S]*?)\n*Change selected language\. Currently:\s*\n*([^\n]+)\n([\s\S]*)/i
+          );
         
+          if (match) {
+            description = match[1].trim();
+            lang = match[2].trim();
+            code = match[3].trim();
+          } else {
+            description = body.trim();
+          }     
           let titleInput = null;
           for (const selector of titleSelectors) {
             titleInput = document.querySelector(selector);
             if (titleInput) break;
           }
         
-          let addedTags = document.querySelectorAll('.s-tag');
-          if (addedTags.length > 0) {
-            let tagNames = [];
-            addedTags.forEach(t => tagNames.push(t.textContent));
-            tag = tagNames.join(',');
-          } else {
-            let tagElement = null;
-            for (const selector of tagSelectors) {
-              tagElement = document.querySelector(selector);
-              if (tagElement && tagElement.value) {
-                tag = tagElement.value;
-                break;
-              }
-            }
-          }
-
-          tag = normalizeTag(tag.trim());
-
-          const codeBlockMatches = body.match(/```[\s\S]*?```/g) || [];
-          const inlineCodeMatches = [];
-          const inlineRegex = /`([\s\S]*?)`/g;
-          let m;
-          while ((m = inlineRegex.exec(body)) !== null) {
-            inlineCodeMatches.push(m[1]);
-          }
-        
-          let allCode = [];
-          if (codeBlockMatches.length > 0) allCode = allCode.concat(codeBlockMatches);
-          if (inlineCodeMatches.length > 0) allCode = allCode.concat(inlineCodeMatches);
-          if (allCode.length > 0) code = allCode.join('\n\n');
-        
-          description = body;
-          codeBlockMatches.forEach(block => {
-            description = description.replace(block, '');
-          });
-          description = description.replace(/`[\s\S]*?`/g, '');
-          description = description.replace(/\n\s*\n/g, '\n').trim();
-        
           const targetInputId = titleInput ? titleInput.id || 'title' : 'title';
-          createTitleSuggestionPanel(description, code, tag, targetInputId);
-        
+          createTitleSuggestionPanel(description, code, lang, targetInputId);
+
         } else if (attempts < maxAttempts) {
           attempts++;
           setTimeout(findAndProcess, 300);
