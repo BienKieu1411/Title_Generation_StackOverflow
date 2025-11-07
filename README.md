@@ -2,6 +2,8 @@
 
 A Chrome extension that automatically generates optimized titles for StackOverflow questions.
 
+Model HuyTran1301/constrative_cont_so_phase2_SI used in the paper is deployed on [Hugging Face](https://huggingface.co/spaces/BienKieu/Title_Generation_SO) and is called in the backend.
+
 ## Demo Plugin
 
 ![Demo](demo/StackOverflow_Title_Generation.gif)
@@ -136,11 +138,6 @@ curl -X POST "http://localhost:8000/genTitle" \
     "code": "arr = [3, 1, 4, 1, 5]",
     "tag": "python"
   }'
-```
-
-#### GET /genTitle
-```bash
-curl "http://localhost:8000/genTitle?description=How%20to%20sort%20an%20array%20in%20Python?&code=arr%20=%20[3,%201,%204,%201,%205]&tag=python"
 ```
 
 #### Response Format
