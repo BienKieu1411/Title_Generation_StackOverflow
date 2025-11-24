@@ -1,4 +1,4 @@
-# Title Generation for StackOverflow
+# Small but Mighty: Leveraging Contrastive Learning for Stack OverflowTitle Generation
 
 A Chrome extension that automatically generates optimized titles for StackOverflow questions.
 
@@ -6,7 +6,7 @@ Model HuyTran1301/constrative_cont_so_phase2_SI used in the paper is deployed on
 
 ## Demo Plugin
 
-![Demo](demo/StackOverflow_Title_Generation.gif)
+[Demo on Youtube](https://www.youtube.com/watch?v=sGaCd7UMAQM)
 
 ## Features
 
